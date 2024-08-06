@@ -1,6 +1,7 @@
 import { FC, useContext, useState } from "react";
 import Context from "../context";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 const AuthPage: FC = () => {
   const { user, setUser } = useContext(Context);
@@ -17,6 +18,14 @@ const AuthPage: FC = () => {
       ...user,
       username,
     });
+
+    axios
+      .post("http://localhost:3001/authenticate", { username: username })
+      .then((r) => {
+        console.log("Response Data:", r.data);
+        setUser({ ...r.data, secret: r.data.secret });
+      })
+      .catch((e) => console.log("Auth Error", e));
   };
 
   return (
